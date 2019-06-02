@@ -14,19 +14,28 @@ def CheckURI(long_uri):
         return data.status_code == 200
     except:
         return False
-    
+
 def GetTemplate():
-    # Stub for reading the Template.html file and returning the contents as a string
+    with open('Template.html', 'r') as file:
+        file_content = "".join(file.readlines())
     
+    return file_content
+
 class Shortener(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         # Handle get requests
+        self.send_response(200)
         
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.end_headers()
+        
+        self.wfile.write(GetTemplate().format("","").encode())
+    
     def do_POST(self):
         # Handle post requests
+        stub = ""
         
-    
-if(__name__ == '__main__'):
+if (__name__ == '__main__'):
     server_address = ('', 8000)
     httpd = http.server.HTTPServer(server_address, Shortener)
     httpd.serve_forever()
