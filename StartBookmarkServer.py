@@ -9,8 +9,11 @@ import requests
 from urllib.parse import unquote, parse_qs
 
 def CheckURI(long_uri):
-    # Stub for checking if the long URI given is valid
-    # Return True if it's valid, False if not
+    try:
+        data = requests.get(long_uri, timeout=5)
+        return data.status_code == 200
+    except:
+        return False
     
 def GetTemplate():
     # Stub for reading the Template.html file and returning the contents as a string
