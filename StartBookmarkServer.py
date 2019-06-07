@@ -23,6 +23,10 @@ def GetTemplate():
     
     return file_content
 
+def UpdatePage(msg):
+    with open('index.html', 'w') as file:
+        file.write(GetTemplate().format(msg, GetKnownMessagesStr()))
+
 def GetKnownMessagesStr():
     known = "".join(
         "<tr>\n\t\t\t\t"
@@ -54,7 +58,7 @@ class Shortener(http.server.BaseHTTPRequestHandler):
 
         # Check that the longuri and the shortname fields are filled
         if 'longuri' not in params or 'shortname' not in params:
-            # TODO: Implement UpdatePage("MSG") method
+            UpdatePage("Both fields need to be filled.")
 
             # Redirect the page back to the home page
             self.send_response(303)
@@ -75,7 +79,7 @@ class Shortener(http.server.BaseHTTPRequestHandler):
             self.end_headers()
         else:
             # URI is bad, so don't store the data
-            # TODO: Implement UpdatePage("MSG")
+            UpdatePage("The long URI was invalid. Please try a different one.")
 
             # Redirect to show the error message
             self.send_response(303)
