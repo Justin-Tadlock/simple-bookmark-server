@@ -55,7 +55,7 @@ class Shortener(http.server.BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'text/html; charset=utf-8')
         self.end_headers()
         
-        self.wfile.write(GetTemplate().format("", GetKnownMessagesStr()).encode())
+        self.wfile.write(GetPage().encode())
     
     def do_POST(self):
         # Handle post requests
