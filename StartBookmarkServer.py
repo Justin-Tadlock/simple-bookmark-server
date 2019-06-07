@@ -37,9 +37,9 @@ def GetPage():
 
 def UpdatePage(msg):
     with open('index.html', 'w') as file:
-        file.write(GetTemplate().format(msg, GetKnownMessagesStr()))
+        file.write(GetTemplate().format(msg, GetKnownUriData()))
 
-def GetKnownMessagesStr():
+def GetKnownUriData():
     known = "".join(
         "<tr>\n\t\t\t\t"
         "<td style=\"border: 1px solid black;\">{}</td>\n\t\t\t\t"
