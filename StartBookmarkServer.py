@@ -42,11 +42,48 @@ class Shortener(http.server.BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'text/html; charset=utf-8')
         self.end_headers()
         
-        self.wfile.write(GetTemplate().format("",GetKnownMessagesStr()).encode())
+        self.wfile.write(GetTemplate().format("", GetKnownMessagesStr()).encode())
     
     def do_POST(self):
         # Handle post requests
-        stub = ""
+        
+        #Decode form data
+        length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(length).decode()
+        params = parse_qs(body)
+
+        # Check that the longuri and the shortname fields are filled
+        if 'longuri' not in params or 'shortname' not in params:
+            # TODO: Implement UpdatePage("MSG") method
+
+            # Redirect the page back to the home page
+            self.send_response(303)
+            self.send_header('Location', "/")
+            self.end_headers()
+
+        # If both fields are filled, read the values
+        longuri = params['longuri'][0]
+        shortname = params['shortname'][0]
+
+        if CheckURI(longuri):
+            # URI is good, store the longuri and shortname
+            memory[shortname] = longuri
+
+            # Redirect to show the additional message
+            self.send_response(303)
+            self.send_header('Location', '/')
+            self.end_headers()
+        else:
+            # URI is bad, so don't store the data
+            # TODO: Implement UpdatePage("MSG")
+
+            # Redirect to show the error message
+            self.send_response(303)
+            self.send_header('Location', '/')
+            self.end_headers()
+
+
+        
         
 if (__name__ == '__main__'):
     server_address = ('', 8000)
