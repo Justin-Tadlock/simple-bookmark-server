@@ -8,6 +8,8 @@ import http.server
 import requests
 from urllib.parse import unquote, parse_qs
 
+memory = {}
+
 def CheckURI(long_uri):
     try:
         data = requests.get(long_uri, timeout=5)
@@ -21,6 +23,17 @@ def GetTemplate():
     
     return file_content
 
+def GetKnownMessagesStr():
+    known = "".join(
+        "<tr>\n\t\t\t\t"
+        "<td style=\"border: 1px solid black;\">{}</td>\n\t\t\t\t"
+        "<td style=\"border: 1px solid black;\">\n\t\t\t\t\t"
+        "<a href=\"{}\" target=\"_blank\">{}</a>\n\t\t\t\t"
+        "</td>\n\t\t\t"
+        "</tr>\n\t\t\t".format(key, memory[key], memory[key])
+                    for key in sorted(memory.keys()))
+    return known
+
 class Shortener(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         # Handle get requests
@@ -29,7 +42,7 @@ class Shortener(http.server.BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'text/html; charset=utf-8')
         self.end_headers()
         
-        self.wfile.write(GetTemplate().format("","").encode())
+        self.wfile.write(GetTemplate().format("",GetKnownMessagesStr()).encode())
     
     def do_POST(self):
         # Handle post requests
