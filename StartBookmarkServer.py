@@ -23,6 +23,15 @@ def GetTemplate():
     
     return file_content
 
+def GetPage():
+    file_content = ""
+
+    with open('index.html', 'r') as file:
+        file_content = "".join(file.readlines())
+    
+    return file_content
+
+
 def UpdatePage(msg):
     with open('index.html', 'w') as file:
         file.write(GetTemplate().format(msg, GetKnownMessagesStr()))
