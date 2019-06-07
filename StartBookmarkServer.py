@@ -82,6 +82,8 @@ class Shortener(http.server.BaseHTTPRequestHandler):
             # URI is good, store the longuri and shortname
             memory[shortname] = longuri
 
+            UpdatePage("The long URI has been successfully added!")
+
             # Redirect to show the additional message
             self.send_response(303)
             self.send_header('Location', '/')
