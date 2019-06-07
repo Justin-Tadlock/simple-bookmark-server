@@ -31,7 +31,7 @@ def GetPage():
             file_content = "".join(file.readlines())
     except:
         file_content = "".join(GetTemplate().format("", ""))
-        
+
     return file_content
 
 
@@ -76,6 +76,7 @@ class Shortener(http.server.BaseHTTPRequestHandler):
             self.send_response(303)
             self.send_header('Location', "/")
             self.end_headers()
+            return
 
         # If both fields are filled, read the values
         longuri = params['longuri'][0]
