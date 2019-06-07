@@ -26,9 +26,12 @@ def GetTemplate():
 def GetPage():
     file_content = ""
 
-    with open('index.html', 'r') as file:
-        file_content = "".join(file.readlines())
-    
+    try:
+        with open('index.html', 'r') as file:
+            file_content = "".join(file.readlines())
+    except:
+        file_content = "".join(GetTemplate().format("", ""))
+        
     return file_content
 
 
