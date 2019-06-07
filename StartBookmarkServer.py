@@ -53,12 +53,31 @@ def GetKnownMessagesStr():
 class Shortener(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         # Handle get requests
-        self.send_response(200)
-        
-        self.send_header('Content-Type', 'text/html; charset=utf-8')
-        self.end_headers()
-        
-        self.wfile.write(GetPage().encode())
+        # Get the shortname used
+        shortname = unquote(self.path[1:])
+
+        # If a parameter was given (the shortname of a URI)
+        if shortname:
+            # Shortname is known
+            if shortname in memory:
+                self.send_response(303)
+                self.send_header('Location', memory[shortname])
+                self.end_headers()
+            else:
+                # Unknown shortname
+                self.send_response(404)
+                self.send_header('Content-Type', 'text/plain; charset=utf-8')
+                self.end_headers()
+
+                self.wfile.write("That shortname, '{}' is not known.".format(shortname).encode())
+        else:
+            # Print the root '/' path
+            self.send_response(200)
+            
+            self.send_header('Content-Type', 'text/html; charset=utf-8')
+            self.end_headers()
+            
+            self.wfile.write(GetPage().encode())
     
     def do_POST(self):
         # Handle post requests
