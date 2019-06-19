@@ -4,6 +4,7 @@
 #
 # This is a bookmark server that will maintain a mapping dictionary of long URI's and shortnames.
 
+import os
 import http.server
 import requests
 from urllib.parse import unquote, parse_qs
@@ -124,6 +125,7 @@ class Shortener(http.server.BaseHTTPRequestHandler):
         
         
 if (__name__ == '__main__'):
-    server_address = ('', 8000)
+    port = int(os.environ.get('PORT', 8000))
+    server_address = ('', port)
     httpd = http.server.HTTPServer(server_address, Shortener)
     httpd.serve_forever()
